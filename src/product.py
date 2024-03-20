@@ -1,10 +1,11 @@
 class Product:
+    products = None
     name: str
     description: str
     price: float
     quantity: int
 
-    __products = []
+    # __products = []
 
     def __init__(self, name, description, price, quantity):
         self.name = name
@@ -13,15 +14,14 @@ class Product:
         self.quantity = quantity
 
     @classmethod
-    def add_product(cls, product):
-        new_product = cls(product["name"], product["description"], product["price"], product["quantity"])
+    def add_product(cls, product, products):
+        new_product = cls(**product)
 
-        for i in cls.__products:
+        for i in products:
             if i.name == new_product.name:
                 i.quantity += new_product.quantity
                 i._price = max(i._price, new_product._price)
                 return i
-        cls.__products.append(new_product)
         return new_product
 
     @property
