@@ -22,6 +22,4 @@ class Category:
     @property
     def print_quantity_products(self):
         for product in self.__products:
-            if product.key == 'products':
-                for pr in product.value:
-                    return f'{pr.name}, {pr.price} руб. Остаток: {pr.quantity}'
+            print(f'{product['name']}, {product['price']} руб. Остаток: {product['quantity']}')
