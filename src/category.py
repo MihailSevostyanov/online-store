@@ -1,3 +1,4 @@
+from src.product import Product
 from src.utils import read_products
 
 
@@ -21,7 +22,8 @@ class Category:
 
     @property
     def print_quantity_products(self):
+        self.__products = Product()
+        string_products = ""
         for product in self.__products:
-            if product.key == 'products':
-                for pr in product.value:
-                    return f'{pr.name}, {pr.price} руб. Остаток: {pr.quantity}'
+            string_products += f'{product['name']}, {product['price']} руб. Остаток: {product['quantity']}\n'
+        return string_products
