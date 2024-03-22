@@ -23,5 +23,5 @@ class Category:
     def print_quantity_products(self):
         string_products = ""
         for product in self.__products:
-            string_products += f'{product['name']}, {product['price']} руб. Остаток: {product['quantity']}\n'
+            string_products += f'{product.name}, {product.price} руб. Остаток: {product.quantity}\n'
         return string_products
