@@ -1,11 +1,9 @@
 class Product:
-    products = None
     name: str
     description: str
     price: float
     quantity: int
 
-    # __products = []
 
     def __init__(self, name, description, price, quantity):
         self.name = name
