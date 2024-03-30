@@ -1,4 +1,4 @@
-from src.utils import read_products
+from src.product import Product
 
 
 class Category:
@@ -26,12 +26,13 @@ class Category:
         return f'{self.name}, количество продуктов: {len(self)} шт.'
 
     def add_products(self, product):
-        self.__products.extend(product)
+        if isinstance(product, Product):
+            self.__products.extend(product)
+        raise ValueError('Добавляемое значение не является экземпляром класса Product или его наследником')
 
     @property
     def print_quantity_products(self):
         string_products = ""
         for product in self.__products:
-            # string_products += f'{product.name}, {product.price} руб. Остаток: {product.quantity}\n'
             string_products += f'{str(product)}'
         return string_products
