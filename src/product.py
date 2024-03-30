@@ -4,17 +4,20 @@ class Product:
     price: float
     quantity: int
 
-    def __init__(self, name, description, price, quantity):
+    def __init__(self, name, description, price, quantity, color):
         self.name = name
         self.description = description
         self._price = float(price)
         self.quantity = quantity
+        self.color = color
 
     def __str__(self):
         return f'{self.name}, {self.price} руб. Остаток: {self.quantity}'
 
     def __add__(self, other):
-        return (self.price * self.quantity) + (other.price * other.quantity)
+        if type(self) == type(other):
+            return (self.price * self.quantity) + (other.price * other.quantity)
+        raise ValueError("Нельзя складывать товары из разных категорий")
 
     @classmethod
     def add_product(cls, product, products):
@@ -44,3 +47,18 @@ class Product:
                 print('Операция отменена')
         else:
             print("Введена некорректная цена")
+
+
+class Smartphone(Product):
+    def __init__(self, name, description, price, quantity, color):
+        super().__init__(name, description, price, quantity, color)
+        self.productivity = productivity
+        self.model = model
+        self.memory = memory
+
+
+class Grass(Product):
+    def __init__(self, name, description, price, quantity, color):
+        super().__init__(name, description, price, quantity, color)
+        self.country = country
+        self.germination_period = germination_period
