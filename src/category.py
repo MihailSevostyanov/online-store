@@ -1,7 +1,14 @@
 from src.product import Product
+from abc import ABC, abstractmethod
 
 
-class Category:
+class AbstractCategory(ABC):
+    @abstractmethod
+    def __init__(self):
+        pass
+
+
+class Category(AbstractCategory):
     name: str
     description: str
     products: list
@@ -27,7 +34,7 @@ class Category:
 
     def add_products(self, product):
         if isinstance(product, Product):
-            self.__products.extend(product)
+            self.__products.append(product)
         raise ValueError('Добавляемое значение не является экземпляром класса Product или его наследником')
 
     @property
@@ -36,3 +43,11 @@ class Category:
         for product in self.__products:
             string_products += f'{str(product)}'
         return string_products
+
+
+class Order(AbstractCategory):
+    def __init__(self, product, quantity):
+        self.product = product
+        self.quantity = quantity
+        self.final_price = product._price * quantity
+
