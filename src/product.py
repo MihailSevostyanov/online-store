@@ -1,4 +1,20 @@
-class Product:
+from abc import ABC, abstractmethod
+
+
+class AbstractProduct(ABC):
+    @abstractmethod
+    def __init__(self):
+        pass
+
+
+class MixinLog:
+
+    def __repr__(self):
+        return (f"Создан объект {self.__class__.__name__}('{self.name}', '{self.description}', "
+                f"'{self.price}', '{self.quantity}')")
+
+
+class Product(AbstractProduct, MixinLog):
     name: str
     description: str
     price: float
@@ -49,7 +65,7 @@ class Product:
             print("Введена некорректная цена")
 
 
-class Smartphone(Product):
+class Smartphone(Product, MixinLog):
     def __init__(self, name, description, price, quantity, color):
         super().__init__(name, description, price, quantity, color)
         self.productivity = productivity
@@ -57,7 +73,7 @@ class Smartphone(Product):
         self.memory = memory
 
 
-class Grass(Product):
+class Grass(Product, MixinLog):
     def __init__(self, name, description, price, quantity, color):
         super().__init__(name, description, price, quantity, color)
         self.country = country
