@@ -16,6 +16,7 @@ class Category(AbstractCategory):
     total_number_of_unique_products = 0
 
     def __init__(self, name, description, products):
+        super().__init__()
         self.name = name
         self.description = description
         self.__products = products
@@ -47,6 +48,7 @@ class Category(AbstractCategory):
 
 class Order(AbstractCategory):
     def __init__(self, product, quantity):
+        super().__init__()
         self.product = product
         self.quantity = quantity
         self.final_price = product._price * quantity

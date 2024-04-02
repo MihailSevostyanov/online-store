@@ -4,23 +4,40 @@ from abc import ABC, abstractmethod
 class AbstractProduct(ABC):
     @abstractmethod
     def __init__(self):
-        pass
+        return self.add_product()
 
 
-class MixinLog:
+    def add_product(cls, product, products):
+        new_product = cls(**product)
+
+        for i in products:
+            if i.name == new_product.name:
+                i.quantity += new_product.quantity
+                i._price = max(i._price, new_product._price)
+                return i
+        return new_product
+
+
+class PrintMixin:
+
+    def __init__(self, *args):
+        print(repr(self))
 
     def __repr__(self):
-        return (f"Создан объект {self.__class__.__name__}('{self.name}', '{self.description}', "
-                f"'{self.price}', '{self.quantity}')")
+        object_attributes = ''
+        for k, v in self.__dict__.items():
+            object_attributes += f'{k}: {v},'
+        return f"создан объект со свойствами {object_attributes})"
 
 
-class Product(AbstractProduct, MixinLog):
+class Product(AbstractProduct, PrintMixin):
     name: str
     description: str
     price: float
     quantity: int
 
     def __init__(self, name, description, price, quantity, color):
+        super().__init__()
         self.name = name
         self.description = description
         self._price = float(price)
@@ -35,16 +52,16 @@ class Product(AbstractProduct, MixinLog):
             return (self.price * self.quantity) + (other.price * other.quantity)
         raise ValueError("Нельзя складывать товары из разных категорий")
 
-    @classmethod
-    def add_product(cls, product, products):
-        new_product = cls(**product)
-
-        for i in products:
-            if i.name == new_product.name:
-                i.quantity += new_product.quantity
-                i._price = max(i._price, new_product._price)
-                return i
-        return new_product
+    # @classmethod
+    # def add_product(cls, product, products):
+    #     new_product = cls(**product)
+    #
+    #     for i in products:
+    #         if i.name == new_product.name:
+    #             i.quantity += new_product.quantity
+    #             i._price = max(i._price, new_product._price)
+    #             return i
+    #     return new_product
 
     @property
     def price(self):
@@ -65,7 +82,7 @@ class Product(AbstractProduct, MixinLog):
             print("Введена некорректная цена")
 
 
-class Smartphone(Product, MixinLog):
+class Smartphone(Product, PrintMixin):
     def __init__(self, name, description, price, quantity, color):
         super().__init__(name, description, price, quantity, color)
         self.productivity = productivity
@@ -73,7 +90,7 @@ class Smartphone(Product, MixinLog):
         self.memory = memory
 
 
-class Grass(Product, MixinLog):
+class Grass(Product, PrintMixin):
     def __init__(self, name, description, price, quantity, color):
         super().__init__(name, description, price, quantity, color)
         self.country = country
