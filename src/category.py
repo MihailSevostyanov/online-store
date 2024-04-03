@@ -2,13 +2,13 @@ from src.product import Product
 from abc import ABC, abstractmethod
 
 
-class AbstractCategory(ABC):
+class BaseCategory(ABC):
     @abstractmethod
     def __init__(self):
         pass
 
 
-class Category(AbstractCategory):
+class Category(BaseCategory):
     name: str
     description: str
     products: list
@@ -46,7 +46,7 @@ class Category(AbstractCategory):
         return string_products
 
 
-class Order(AbstractCategory):
+class Order(BaseCategory):
     def __init__(self, product, quantity):
         super().__init__()
         self.product = product
