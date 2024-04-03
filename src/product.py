@@ -1,21 +1,10 @@
 from abc import ABC, abstractmethod
 
 
-class AbstractProduct(ABC):
+class BaseProduct(ABC):
     @abstractmethod
-    def __init__(self):
-        return self.add_product()
-
-
-    def add_product(cls, product, products):
-        new_product = cls(**product)
-
-        for i in products:
-            if i.name == new_product.name:
-                i.quantity += new_product.quantity
-                i._price = max(i._price, new_product._price)
-                return i
-        return new_product
+    def new_product(self, *args):
+        pass
 
 
 class PrintMixin:
@@ -30,7 +19,7 @@ class PrintMixin:
         return f"создан объект со свойствами {object_attributes})"
 
 
-class Product(AbstractProduct, PrintMixin):
+class Product(BaseProduct, PrintMixin):
     name: str
     description: str
     price: float
@@ -52,16 +41,16 @@ class Product(AbstractProduct, PrintMixin):
             return (self.price * self.quantity) + (other.price * other.quantity)
         raise ValueError("Нельзя складывать товары из разных категорий")
 
-    # @classmethod
-    # def add_product(cls, product, products):
-    #     new_product = cls(**product)
-    #
-    #     for i in products:
-    #         if i.name == new_product.name:
-    #             i.quantity += new_product.quantity
-    #             i._price = max(i._price, new_product._price)
-    #             return i
-    #     return new_product
+    @classmethod
+    def new_product(cls, product, products):
+        new_product = cls(**product)
+
+        for i in products:
+            if i.name == new_product.name:
+                i.quantity += new_product.quantity
+                i._price = max(i._price, new_product._price)
+                return i
+        return new_product
 
     @property
     def price(self):
