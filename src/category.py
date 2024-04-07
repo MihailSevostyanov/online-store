@@ -1,4 +1,4 @@
-from src.product import Product
+from src.product import Product, ZeroProductQuantity
 from abc import ABC, abstractmethod
 
 
@@ -34,9 +34,16 @@ class Category(BaseCategory):
         return f'{self.name}, количество продуктов: {len(self)} шт.'
 
     def add_products(self, product):
-        if isinstance(product, Product):
-            self.__products.append(product)
-        raise ValueError('Добавляемое значение не является экземпляром класса Product или его наследником')
+        try:
+            if isinstance(product, Product):
+                self.__products.append(product)
+                return self.__products
+            raise ValueError('Добавляемое значение не является экземпляром класса Product или его наследником')
+        except ValueError as e:
+            print(e)
+            return self.__products
+        finally:
+            print('Обработка добавления товара завершена')
 
     @property
     def print_quantity_products(self):
@@ -46,10 +53,28 @@ class Category(BaseCategory):
         return string_products
 
 
+    def average_price(self):
+        try:
+            average_price = round(sum([i._price for i in self.__products]) / len(self.__products), 2)
+            return average_price
+        except ZeroDivisionError:
+            return 0
+
+
+
 class Order(BaseCategory):
     def __init__(self, product, quantity):
-        super().__init__()
-        self.product = product
-        self.quantity = quantity
-        self.final_price = product._price * quantity
-
+        try:
+            if quantity > 0:
+                super().__init__()
+                self.product = product
+                self.quantity = quantity
+                self.final_price = product._price * quantity
+            else:
+                raise ZeroProductQuantity
+        except ZeroProductQuantity as e:
+            print(e)
+        else:
+            print('Товар добавлен')
+        finally:
+            print('Обработка добавления товара завершена')

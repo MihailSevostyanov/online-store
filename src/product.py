@@ -44,13 +44,21 @@ class Product(BaseProduct, PrintMixin):
     @classmethod
     def new_product(cls, product, products):
         new_product = cls(**product)
-
-        for i in products:
-            if i.name == new_product.name:
-                i.quantity += new_product.quantity
-                i._price = max(i._price, new_product._price)
-                return i
-        return new_product
+        try:
+            if new_product.quantity > 0:
+                for i in products:
+                    if i.name == new_product.name:
+                        i.quantity += new_product.quantity
+                        i._price = max(i._price, new_product._price)
+                        return i
+                return new_product
+            raise ZeroProductQuantity()
+        except ZeroProductQuantity as e:
+            print(e)
+        else:
+            print('Товар добавлен')
+        finally:
+            print('Обработка добавления товара завершена')
 
     @property
     def price(self):
@@ -84,3 +92,12 @@ class Grass(Product, PrintMixin):
         super().__init__(name, description, price, quantity, color)
         self.country = country
         self.germination_period = germination_period
+
+
+class ZeroProductQuantity(Exception):
+    def __init__(self, *args, **kwargs):
+        self.message = args[0] if args else print
+        'Количество товара не может быть менее 1'
+
+    def __str__(self):
+        return self.message
